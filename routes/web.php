@@ -1,13 +1,26 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Job;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
-
 Route::get('/jobs', function () {
-    $jobs = App\Models\Job::all();
-    dd($jobs[1]->salary);
+    $jobs = Job::with('employer')->get();
+
+    return view('jobs', [
+        'jobs' => $jobs
+    ]);
+});
+
+Route::get('/jobs/{id}', function ($id) {
+    $job = Job::find($id);
+
+    return view('job', ['job' => $job]);
+});
+
+Route::get('/contact', function () {
+    return view('contact');
 });
